@@ -68,3 +68,12 @@ h1{
 .timer{
     color: #05C0E9;
 }
+
+main p{
+    display: flex;
+    margin-top: 10px;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+}

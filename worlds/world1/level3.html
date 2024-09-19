@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Three</title>
+    <link rel="stylesheet" href="level.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cabeza">
+        <div id="timer" class="timer">30</div>
+        <div class="question" id="question"></div>
+    </div>
+    <div id="help" class="hidden"></div>
+    <ul class="options" id="options"></ul>
+    <button id="next" class="hidden">Next Question</button>
+    <div id="score" class="score">Coins: 0</div>
+    
+    <script>
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timerInterval;
+        let correctMatches = 0;
+        const totalMatches = 3;
+        const correctSentence = 'THREE BOOKS ARE ON THE TABLE';
+
+        const questions = [
+            {
+                type: 'abc',
+                question: 'How many sides does a triangle have?',
+                options: ['A. 2', 'B. 3', 'C. 4'],
+                answer: 'B'
+            },
+            {
+                type: 'match',
+                question: 'Match the following sentences with their respective images.',
+                options: [
+                    { text: 'There are eight planets in the solar system.', image: 'image1' },
+                    { text: 'I see one bird in the tree.', image: 'image2' },
+                    { text: 'She has three red apples in her basket.', image: 'image3' }
+                ],
+                images: {
+                    image1: 'eightplanets.png',
+                    image2: 'onebird.png',
+                    image3: 'threeapples.png'
+                },
+                matches: {
+                    'There are eight planets in the solar system.': 'image1',
+                    'I see one bird in the tree.': 'image2',
+                    'She has three red apples in her basket.': 'image3'
+                }
+            },
+            {
+                type: 'abc',
+                question: 'What is the number before 10?',
+                options: ['A. 8', 'B. 9', 'C. 11'],
+                answer: 'B'
+            },
+            {
+                type: 'order',
+                question: 'Order the following sentence.',
+                options: ['Books', 'On', 'Three', 'Table', 'Are', 'The'],
+                answer: correctSentence
+            },
+            {
+                type: 'abc',
+                question: 'If you subtract 2 from 7, what is the result?',
+                options: ['A. 4', 'B. 5', 'C. 6'],
+                answer: 'B'
+            }
+        ];
+
+        function startTimer() {
+            timeLeft = 30;
+            document.getElementById('timer').textContent = timeLeft;
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleAnswer(null);
+                } else {
+                    timeLeft--;
+                    document.getElementById('timer').textContent = timeLeft;
+                }
+            }, 1000);
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const helpElement = document.getElementById('help');
+            const nextButton = document.getElementById('next');
+
+            questionElement.textContent = question.question;
+            optionsElement.innerHTML = '';  // Limpiar las opciones
+            helpElement.classList.add('hidden'); // Ocultar ayuda
+            helpElement.textContent = ''; // Limpiar el texto de ayuda
+            nextButton.classList.add('hidden'); // Ocultar botón de siguiente
+
+            switch (question.type) {
+                case 'abc':
+                    question.options.forEach(option => {
+                        const li = document.createElement('li');
+                        const button = document.createElement('button');
+                        button.textContent = option;
+                        button.className = 'option-button';
+                        button.onclick = () => handleAnswer(option.charAt(0));
+                        li.appendChild(button);
+                        optionsElement.appendChild(li);
+                    });
+                    break;
+
+                case 'match':
+                    correctMatches = 0;
+                    question.options.forEach(option => {
+                        const li = document.createElement('li');
+                        const img = document.createElement('img');
+                        img.src = question.images[option.image];
+                        img.className = 'image-option';
+
+                        const select = document.createElement('select');
+                        const defaultOption = document.createElement('option');
+                        defaultOption.textContent = 'Select a phrase';
+                        defaultOption.value = '';
+                        select.appendChild(defaultOption);
+
+                        Object.keys(question.matches).forEach(text => {
+                            const opt = document.createElement('option');
+                            opt.value = text;
+                            opt.textContent = text;
+                            select.appendChild(opt);
+                        });
+
+                        select.onchange = () => {
+                            const selectedPhrase = select.value;
+                            if (question.matches[selectedPhrase] === option.image) {
+                                correctMatches++;
+                                select.disabled = true;
+                                if (correctMatches === totalMatches) {
+                                    handleCorrectAnswer();
+                                    document.getElementById('next').classList.remove('hidden');
+                                }
+                            } else {
+                                alert('Respuesta incorrecta. Intenta de nuevo.');
+                            }
+                        };
+
+                        li.appendChild(img);
+                        li.appendChild(select);
+                        optionsElement.appendChild(li);
+                    });
+                    break;
+
+                case 'order':
+                    const orderElement = document.createElement('div');
+                    orderElement.className = 'order-option';
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = 'Type the sentence here...';
+
+                    const submitButton = document.createElement('button');
+                    submitButton.textContent = 'Submit';
+                    submitButton.onclick = checkOrder;
+
+                    orderElement.appendChild(input);
+                    orderElement.appendChild(submitButton);
+
+                    helpElement.textContent = 'Help: Three – Books – Are – On – The – Table';
+                    helpElement.classList.remove('hidden');
+
+                    optionsElement.appendChild(orderElement);
+                    break;
+            }
+
+            startTimer();
+        }
+
+        function checkOrder() {
+            const input = document.querySelector('.order-option input');
+            const userAnswer = input.value.toUpperCase().trim();
+
+            if (userAnswer === correctSentence) {
+                handleCorrectAnswer();
+                document.getElementById('next').classList.remove('hidden');
+            } else {
+                alert('Respuesta incorrecta. Intenta de nuevo.');
+            }
+        }
+
+        function handleAnswer(selectedAnswer) {
+            clearInterval(timerInterval);
+
+            const question = questions[currentQuestion];
+
+            if (question.type === 'abc') {
+                if (selectedAnswer === question.answer) {
+                    handleCorrectAnswer();
+                    document.getElementById('next').classList.remove('hidden');
+                } else {
+                    alert('Respuesta incorrecta. Intenta de nuevo.');
+                }
+            }
+
+            if (question.type === 'order' && timeLeft <= 0) {
+                document.getElementById('next').classList.remove('hidden');
+            }
+        }
+
+        function handleCorrectAnswer() {
+            // Cambia el fondo a verde
+            document.body.classList.add('correct-background');
+
+            setTimeout(() => {
+                // Elimina la clase después de 1 segundo
+                document.body.classList.remove('correct-background');
+            }, 3500);
+
+            const remainingTime = timeLeft;
+            let earnedCoins = 0;
+
+            if (remainingTime > 20) earnedCoins = 3;
+            else if (remainingTime > 10) earnedCoins = 2;
+            else earnedCoins = 1;
+
+            score += earnedCoins;
+            document.getElementById('score').textContent = `Coins: ${score}`;
+        }
+
+        document.getElementById('next').onclick = () => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                alert('¡Has completado todas las preguntas!');
+                window.location.href = 'selectlevel.html'; // Redirige a selectlevel.html
+            }
+        };
+
+        showQuestion();
+    </script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level Five</title>
+    <link rel="stylesheet" href="level.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="cabeza">
+        <div id="timer" class="timer">30</div>
+        <div class="question" id="question"></div>
+    </div>
+    <div id="help" class="hidden"></div>
+    <ul class="options" id="options"></ul>
+    <div id="imageContainer" class="hidden"></div>
+    <button id="next" class="hidden">Next Question</button>
+    <div id="score" class="score">Coins: 0</div>
+    
+    <script>
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timerInterval;
+        let correctMatches = 0;
+        const totalMatches = 3;
+        const correctSentenceOrder = "I LIKE VANILLA ICE CREAM";
+        const correctSentenceOrder2 = "I DON'T LIKE SPIDERS";
+
+        const questions = [
+            {
+                type: 'abc',
+                question: 'How do you express a preference for something?',
+                options: ['a) I don\'t like ice cream.', 'b) I don\'t like it.', 'c) I like ice cream.'],
+                answer: 'c'
+            },
+            {
+                type: 'abc',
+                question: 'Which sentence correctly expresses a dislike?',
+                options: ['a) I don\'t like pizza.', 'b) I like pizza.', 'c) I like not pizza.'],
+                answer: 'a'
+            },
+            {
+                type: 'match',
+                question: 'Match the following sentences with their respective images.',
+                options: [
+                    { text: 'I like apples.', image: 'image1' },
+                    { text: 'I don\'t like spiders.', image: 'image2' },
+                    { text: 'I like swimming.', image: 'image3' }
+                ],
+                images: {
+                    image1: 'apples.png',
+                    image2: 'spiders.png',
+                    image3: 'swimming.png'
+                },
+                matches: {
+                    'I like apples.': 'image1',
+                    'I don\'t like spiders.': 'image2',
+                    'I like swimming.': 'image3'
+                }
+            },
+            {
+                type: 'abc',
+                question: 'Which is the correct way to express a dislike for vegetables?',
+                options: ['a) I like vegetables.', 'b) I don’t like vegetables.', 'c) I don’t vegetables.'],
+                answer: 'b'
+            },
+            {
+                type: 'match',
+                question: 'Match the following sentences with their respective images.',
+                options: [
+                    { text: 'I don\'t like carrots.', image: 'image4' },
+                    { text: 'I like ice cream.', image: 'image5' },
+                    { text: 'I don\'t like snakes.', image: 'image6' }
+                ],
+                images: {
+                    image4: 'carrots.png',
+                    image5: 'icecream.png',
+                    image6: 'snakes.png'
+                },
+                matches: {
+                    'I don\'t like carrots.': 'image4',
+                    'I like ice cream.': 'image5',
+                    'I don\'t like snakes.': 'image6'
+                }
+            },
+            {
+                type: 'order',
+                question: 'Order the following sentence:',
+                options: ['like', 'I', 'movies', 'watching'],
+                answer: correctSentenceOrder
+            },
+            {
+                type: 'abc',
+                question: 'What does "I don\'t like doing homework" imply?',
+                options: ['a) I enjoy doing homework.', 'b) I dislike doing homework.', 'c) I always do homework.'],
+                answer: 'b'
+            },
+            {
+                type: 'match',
+                question: 'Match the following sentences with their respective images.',
+                options: [
+                    { text: 'I like cats.', image: 'image7' },
+                    { text: 'I don\'t like rainy days.', image: 'image8' },
+                    { text: 'I like reading books.', image: 'image9' }
+                ],
+                images: {
+                    image7: 'cats.png',
+                    image8: 'rainydays.png',
+                    image9: 'books.png'
+                },
+                matches: {
+                    'I like cats.': 'image7',
+                    'I don\'t like rainy days.': 'image8',
+                    'I like reading books.': 'image9'
+                }
+            },
+            {
+                type: 'order',
+                question: 'Order the following sentence:',
+                options: ['don\'t', 'spiders', 'I', 'like'],
+                answer: correctSentenceOrder2
+            },
+            {
+                type: 'abc',
+                question: 'Which sentence expresses a negative opinion about a subject?',
+                options: ['a) I don’t like math.', 'b) I like math.', 'c) I math don’t like.'],
+                answer: 'a'
+            },
+            {
+                type: 'match',
+                question: 'Match the following sentences with their respective images.',
+                options: [
+                    { text: 'I don\'t like broccoli.', image: 'image10' },
+                    { text: 'I like playing soccer.', image: 'image11' },
+                    { text: 'I don\'t like loud music.', image: 'image12' }
+                ],
+                images: {
+                    image10: 'broccoli.png',
+                    image11: 'soccer.png',
+                    image12: 'loudmusic.png'
+                },
+                matches: {
+                    'I don\'t like broccoli.': 'image10',
+                    'I like playing soccer.': 'image11',
+                    'I don\'t like loud music.': 'image12'
+                }
+            },
+            {
+                type: 'order',
+                question: 'Order the following sentence:',
+                options: ['ice cream', 'I', 'like', 'vanilla'],
+                answer: "I LIKE VANILLA ICE CREAM"
+            }
+        ];
+
+        function startTimer() {
+            timeLeft = 30; // Reinicia el tiempo a 30 segundos
+            document.getElementById('timer').textContent = timeLeft;
+            timerInterval = setInterval(() => {
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleAnswer(null);
+                } else {
+                    timeLeft--;
+                    document.getElementById('timer').textContent = timeLeft;
+                }
+            }, 1000);
+        }
+
+        function showQuestion() {
+            const question = questions[currentQuestion];
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const helpElement = document.getElementById('help');
+            const nextButton = document.getElementById('next');
+            const imageContainer = document.getElementById('imageContainer');
+
+            questionElement.textContent = question.question;
+            optionsElement.innerHTML = '';  // Limpiar las opciones
+            helpElement.classList.add('hidden'); // Ocultar ayuda
+            helpElement.textContent = ''; // Limpiar el texto de ayuda
+            nextButton.classList.add('hidden'); // Ocultar botón de siguiente
+            imageContainer.innerHTML = ''; // Limpiar el contenedor de la imagen
+
+            switch (question.type) {
+                case 'abc':
+                    question.options.forEach(option => {
+                        const li = document.createElement('li');
+                        const button = document.createElement('button');
+                        button.textContent = option;
+                        button.className = 'option-button';
+                        button.onclick = () => handleAnswer(option.charAt(0));
+                        li.appendChild(button);
+                        optionsElement.appendChild(li);
+                    });
+                    break;
+
+                case 'match':
+                    correctMatches = 0;
+                    question.options.forEach(option => {
+                        const li = document.createElement('li');
+                        const img = document.createElement('img');
+                        img.src = question.images[option.image];
+                        img.className = 'image-option';
+
+                        const select = document.createElement('select');
+                        const defaultOption = document.createElement('option');
+                        defaultOption.textContent = 'Select a phrase';
+                        defaultOption.value = '';
+                        select.appendChild(defaultOption);
+
+                        Object.keys(question.matches).forEach(text => {
+                            const opt = document.createElement('option');
+                            opt.value = text;
+                            opt.textContent = text;
+                            select.appendChild(opt);
+                        });
+
+                        select.onchange = () => {
+                            const selectedPhrase = select.value;
+                            if (question.matches[selectedPhrase] === option.image) {
+                                correctMatches++;
+                                select.disabled = true;
+                                if (correctMatches === totalMatches) {
+                                    handleCorrectAnswer();
+                                    nextButton.classList.remove('hidden');
+                                }
+                            } else {
+                                alert('Respuesta incorrecta. Intenta de nuevo.');
+                            }
+                        };
+
+                        li.appendChild(img);
+                        li.appendChild(select);
+                        optionsElement.appendChild(li);
+                    });
+                    break;
+
+                case 'order':
+                    const orderElement = document.createElement('div');
+                    orderElement.className = 'order-option';
+
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.placeholder = 'Type the sentence here...';
+
+                    const submitButton = document.createElement('button');
+                    submitButton.textContent = 'Submit';
+                    submitButton.onclick = checkOrder;
+
+                    orderElement.appendChild(input);
+                    orderElement.appendChild(submitButton);
+
+                    helpElement.textContent = 'Help: I like vanilla ice cream';
+                    helpElement.classList.remove('hidden');
+
+                    optionsElement.appendChild(orderElement);
+                    break;
+            }
+
+            startTimer();
+        }
+
+        function checkOrder() {
+            const input = document.querySelector('.order-option input');
+            const userAnswer = input.value.toUpperCase().trim();
+
+            if (userAnswer === correctSentenceOrder || userAnswer === correctSentenceOrder2) {
+                handleCorrectAnswer();
+                document.getElementById('next').classList.remove('hidden');
+            } else {
+                alert('Respuesta incorrecta. Intenta de nuevo.');
+            }
+        }
+
+        function handleAnswer(selectedAnswer) {
+            clearInterval(timerInterval);
+
+            const question = questions[currentQuestion];
+
+            if (question.type === 'abc') {
+                if (selectedAnswer === question.answer) {
+                    handleCorrectAnswer();
+                    document.getElementById('next').classList.remove('hidden');
+                } else {
+                    alert('Respuesta incorrecta. Intenta de nuevo.');
+                }
+            }
+
+            if (question.type === 'order' && timeLeft <= 0) {
+                document.getElementById('next').classList.remove('hidden');
+            }
+        }
+
+        function handleCorrectAnswer() {
+            document.body.classList.add('correct-background');
+
+            setTimeout(() => {
+                document.body.classList.remove('correct-background');
+            }, 3500);
+
+            const remainingTime = timeLeft;
+            let earnedCoins = 0;
+
+            if (remainingTime > 20) earnedCoins = 3;
+            else if (remainingTime > 10) earnedCoins = 2;
+            else earnedCoins = 1;
+
+            score += earnedCoins;
+            document.getElementById('score').textContent = `Coins: ${score}`;
+        }
+
+        document.getElementById('next').onclick = () => {
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                showQuestion();
+            } else {
+                alert('¡Has completado todas las preguntas!');
+                window.location.href = 'selectlevel.html'; // Redirige a selectlevel.html
+            }
+        };
+
+        showQuestion();
+    </script>
+</body>
+</html>

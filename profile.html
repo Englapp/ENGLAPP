@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <title>Profile</title>
+</head>
+<body>
+    <header>
+        <div>
+            <a href="index.html">
+                <img src="images/logo.png" alt="logo">
+            </a>
+        </div>
+        <div class="icons">
+            <a href="link">
+                <img src="images/whatsapp.svg" alt="logo">
+            </a>
+            <a href="link">
+                <img src="images/facebook.svg" alt="logo">
+            </a>
+            <a href="link">
+                <img src="images/instagram.svg" alt="logo">
+            </a>
+        </div>       
+    </header>
+    <h1>EDIT YOUR PROFILE</h1>
+    <main>
+        <div class="profile">
+            <div class="user">
+                <img id="profileAvatar" src="images/guess.png" alt="avatar">
+                <a href="avatar.html"><button>Change Avatar</button></a>
+            </div>
+            <form>
+                <input type="text" id="username" placeholder="User name" value="">
+                <button type="button" id="saveButton">Save</button>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        // Cargar avatar seleccionado
+        const selectedAvatar = localStorage.getItem('selectedAvatar');
+        if (selectedAvatar) {
+            document.getElementById('profileAvatar').src = 'images/' + selectedAvatar;
+        }
+
+        // Cargar nombre del usuario si está en localStorage
+        const savedUsername = localStorage.getItem('username');
+        if (savedUsername) {
+            document.getElementById('username').value = savedUsername;
+        }
+
+        // Guardar nombre de usuario al hacer clic en el botón "Save"
+        document.getElementById('saveButton').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+            localStorage.setItem('username', username);
+            alert("Nombre de usuario guardado: " + username);
+        });
+    </script>
+</body>
+</html>

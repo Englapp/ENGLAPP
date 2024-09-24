@@ -248,6 +248,10 @@
                 showQuestion();
             } else {
                 alert('¡Has completado todas las preguntas!');
+                if (score >= 15) {
+                    // Guardar progreso en localStorage
+                    localStorage.setItem('level24Completed', true);
+                }
                 window.location.href = 'selectlevel.html'; // Redirige a selectlevel.html
             }
         };

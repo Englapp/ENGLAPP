@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
+    <title>Avatar</title>
+</head>
+<body>
+    <header>
+        <div>
+            <a href="index.html">
+                <img src="images/logo.png" alt="logo">
+            </a>
+        </div>
+        <div class="icons">
+            <a href="link">
+                <img src="images/whatsapp.svg" alt="logo">
+            </a>
+            <a href="link">
+                <img src="images/facebook.svg" alt="logo">
+            </a>
+            <a href="link">
+                <img src="images/instagram.svg" alt="logo">
+            </a>
+        </div>       
+    </header>
+    <h1>SELECT YOUR AVATAR</h1>
+    <main>
+        <div class="avatares">
+            <div class="user">
+                <img id="avatar11" src="images/avatar11.png" alt="Avatar Desbloqueado - Mundo 1 - Nivel 1" style="display:none;" onclick="selectAvatar('avatar11.png')">
+                <img id="avatar12" src="images/avatar12.png" alt="Avatar Desbloqueado - Mundo 1 - Nivel 2" style="display:none;" onclick="selectAvatar('avatar12.png')">
+                <img id="avatar13" src="images/avatar13.png" alt="Avatar Desbloqueado - Mundo 1 - Nivel 3" style="display:none;" onclick="selectAvatar('avatar13.png')">
+                <img id="avatar14" src="images/avatar14.png" alt="Avatar Desbloqueado - Mundo 1 - Nivel 4" style="display:none;" onclick="selectAvatar('avatar14.png')">
+                <img id="avatar15" src="images/avatar15.png" alt="Avatar Desbloqueado - Mundo 1 - Nivel 5" style="display:none;" onclick="selectAvatar('avatar15.png')">
+                
+                <img id="avatar21" src="images/avatar21.png" alt="Avatar Desbloqueado - Mundo 2 - Nivel 1" style="display:none;" onclick="selectAvatar('avatar21.png')">
+                <img id="avatar22" src="images/avatar22.png" alt="Avatar Desbloqueado - Mundo 2 - Nivel 2" style="display:none;" onclick="selectAvatar('avatar22.png')">
+                <img id="avatar23" src="images/avatar23.png" alt="Avatar Desbloqueado - Mundo 2 - Nivel 3" style="display:none;" onclick="selectAvatar('avatar23.png')">
+                <img id="avatar24" src="images/avatar24.png" alt="Avatar Desbloqueado - Mundo 2 - Nivel 4" style="display:none;" onclick="selectAvatar('avatar24.png')">
+                <img id="avatar25" src="images/avatar25.png" alt="Avatar Desbloqueado - Mundo 2 - Nivel 5" style="display:none;" onclick="selectAvatar('avatar25.png')">
+                
+                <img id="avatar31" src="images/avatar31.png" alt="Avatar Desbloqueado - Mundo 3 - Nivel 1" style="display:none;" onclick="selectAvatar('avatar31.png')">
+                <img id="avatar32" src="images/avatar32.png" alt="Avatar Desbloqueado - Mundo 3 - Nivel 2" style="display:none;" onclick="selectAvatar('avatar32.png')">
+                <img id="avatar33" src="images/avatar33.png" alt="Avatar Desbloqueado - Mundo 3 - Nivel 3" style="display:none;" onclick="selectAvatar('avatar33.png')">
+                <img id="avatar34" src="images/avatar34.png" alt="Avatar Desbloqueado - Mundo 3 - Nivel 4" style="display:none;" onclick="selectAvatar('avatar34.png')">
+                <img id="avatar35" src="images/avatar35.png" alt="Avatar Desbloqueado - Mundo 3 - Nivel 5" style="display:none;" onclick="selectAvatar('avatar35.png')">
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Mostrar avatares desbloqueados y guardar la selección en localStorage
+        function selectAvatar(avatar) {
+            localStorage.setItem('selectedAvatar', avatar);
+            alert("Avatar seleccionado: " + avatar);
+        }
+
+        // Mostrar solo los avatares desbloqueados
+        if (localStorage.getItem('level11Completed') === 'true') {
+            document.getElementById('avatar11').style.display = 'block';
+        }
+        if (localStorage.getItem('level12Completed') === 'true') {
+            document.getElementById('avatar12').style.display = 'block';
+        }
+        if (localStorage.getItem('level13Completed') === 'true') {
+            document.getElementById('avatar13').style.display = 'block';
+        }
+        if (localStorage.getItem('level14Completed') === 'true') {
+            document.getElementById('avatar14').style.display = 'block';
+        }
+        if (localStorage.getItem('level15Completed') === 'true') {
+            document.getElementById('avatar15').style.display = 'block';
+        }
+
+        if (localStorage.getItem('level21Completed') === 'true') {
+            document.getElementById('avatar21').style.display = 'block';
+        }
+        if (localStorage.getItem('level22Completed') === 'true') {
+            document.getElementById('avatar22').style.display = 'block';
+        }
+        if (localStorage.getItem('level23Completed') === 'true') {
+            document.getElementById('avatar23').style.display = 'block';
+        }
+        if (localStorage.getItem('level24Completed') === 'true') {
+            document.getElementById('avatar24').style.display = 'block';
+        }
+        if (localStorage.getItem('level25Completed') === 'true') {
+            document.getElementById('avatar25').style.display = 'block';
+        }
+
+        if (localStorage.getItem('level31Completed') === 'true') {
+            document.getElementById('avatar31').style.display = 'block';
+        }
+        if (localStorage.getItem('level32Completed') === 'true') {
+            document.getElementById('avatar32').style.display = 'block';
+        }
+        if (localStorage.getItem('level33Completed') === 'true') {
+            document.getElementById('avatar33').style.display = 'block';
+        }
+        if (localStorage.getItem('level34Completed') === 'true') {
+            document.getElementById('avatar34').style.display = 'block';
+        }
+        if (localStorage.getItem('level35Completed') === 'true') {
+            document.getElementById('avatar35').style.display = 'block';
+        }
+    </script>
+</body>
+</html>

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap" rel="stylesheet">
-    <title>Home</title>
+    <title>Help</title>
 </head>
 <body>
     <header>
@@ -13,6 +13,14 @@
             <a href="index.html">
                 <img src="images/logo.png" alt="logo">
             </a>
+        </div>
+        <div class="datausers">
+            <div class="user">
+                <img id="profileAvatar" src="images/guest.png" alt="avatar">
+            </div>
+            <Form>
+                <input type="text" id="username" placeholder="Guest" value="">
+            </Form>
         </div>
         <div class="icons">
             <a href="link">
@@ -48,5 +56,20 @@
            <br>6. Have Fun and Learn!: This game is not only entertaining but also helps you learn about colors and phrases in English.
         </p>
     </main>
+    <script>
+        // Cargar avatar seleccionado
+        const selectedAvatar = localStorage.getItem('selectedAvatar');
+        if (selectedAvatar) {
+            document.getElementById('profileAvatar').src = 'images/' + selectedAvatar;
+        }
+        // Cargar nombre del usuario si está en localStorage
+    const savedUsername = localStorage.getItem('username');
+    if (savedUsername) {
+        const usernameInput = document.getElementById('username');
+        usernameInput.value = savedUsername;
+        usernameInput.disabled = true; // Inhabilitar el campo de entrada
+    }
+
+    </script>
 </body>
 </html>

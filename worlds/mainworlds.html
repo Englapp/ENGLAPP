@@ -14,6 +14,14 @@
                 <img src="../images/logo.png" alt="logo">
             </a>
         </div>
+        <div class="datausers">
+            <div class="user">
+                <img id="profileAvatar" src="images/guest.png" alt="avatar">
+            </div>
+            <Form>
+                <input type="text" id="username" placeholder="Guest" value="">
+            </Form>
+        </div>
         <div class="icons">
             <a href="link">
                 <img src="../images/whatsapp.svg" alt="logo" href="worlds/mainworlds.html">
@@ -40,5 +48,20 @@
             </div>
         </div>
     </main>
+    <script>
+        // Cargar avatar seleccionado
+        const selectedAvatar = localStorage.getItem('selectedAvatar');
+        if (selectedAvatar) {
+            document.getElementById('profileAvatar').src = 'images/' + selectedAvatar;
+        }
+        // Cargar nombre del usuario si está en localStorage
+    const savedUsername = localStorage.getItem('username');
+    if (savedUsername) {
+        const usernameInput = document.getElementById('username');
+        usernameInput.value = savedUsername;
+        usernameInput.disabled = true; // Inhabilitar el campo de entrada
+    }
+
+    </script>
 </body>
 </html>
